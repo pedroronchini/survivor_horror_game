@@ -10,7 +10,7 @@ public class InventorySlotUI : MonoBehaviour
 
     public void UpdateUI(InventorySlot slot)
     {
-        if (slot.item != null)
+        if (slot != null && slot.item != null)
         {
             textName.text = slot.item.itemName;
             textQuantity.text = slot.item.isStackable ? slot.quantity.ToString() : "";

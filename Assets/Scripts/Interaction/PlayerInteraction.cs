@@ -5,9 +5,14 @@ public class PlayerInteraction : MonoBehaviour
 {
    private IInteractable nextItem;
 
-   private Keyboard keyboard;
+   private InputAction interactAction;
 
    [SerializeField] private GameObject textoInteracao;
+
+   private void Awake()
+    {
+        interactAction = InputSystem.actions.FindAction("Player/Interact", throwIfNotFound: true);
+    }
 
    private void OnTriggerEnter(Collider other) {
         if (other.TryGetComponent<IInteractable>(out var interactable))
@@ -25,19 +30,17 @@ public class PlayerInteraction : MonoBehaviour
                 nextItem = null;
                 textoInteracao.SetActive(false);
             }
-            
+
         }
    }
 
    private void Update()
     {
-        keyboard = Keyboard.current;
-
-        if (keyboard.eKey.wasPressedThisFrame && nextItem != null)
+        if (interactAction.WasPressedThisFrame() && nextItem != null)
         {
             nextItem.Interact();
             textoInteracao.SetActive(false);
-            
+
             nextItem = null;
         }
     }

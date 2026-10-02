@@ -12,7 +12,8 @@ public class CameraSensitivity : MonoBehaviour
 
         foreach (var axis in axisController.Controllers)
         {
-            axis.Input.Gain = sensitivity;
+            // Preserva o sinal do Gain (o eixo Y usa -1 para não inverter a câmera)
+            axis.Input.Gain = Mathf.Sign(axis.Input.Gain) * sensitivity;
         }
     }
 }

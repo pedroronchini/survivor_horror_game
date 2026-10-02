@@ -8,7 +8,6 @@ public class InventoryUI : MonoBehaviour
     private void Awake() 
     {
         inventorySlots = GetComponentsInChildren<InventorySlotUI>();
-        this.RefreshUI();
     }
 
     private void OnEnable() 
@@ -26,7 +25,9 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            inventorySlots[i].UpdateUI(inventory.slots[i]);
+            // A UI pode ter mais slots que o inventário atual (ex.: após upgrade de capacidade)
+            var slot = i < inventory.slots.Count ? inventory.slots[i] : null;
+            inventorySlots[i].UpdateUI(slot);
         }
     }
 }

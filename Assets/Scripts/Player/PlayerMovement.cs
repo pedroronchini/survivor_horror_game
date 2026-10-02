@@ -16,9 +16,11 @@ public class PlayerMovement : MonoBehaviour
     private Transform cameraTransform;
     private PlayerAiming playerAiming;
     private float verticalVelocity;
+    private InputAction moveAction;
 
     private void Awake()
     {
+        moveAction = InputSystem.actions.FindAction("Player/Move", throwIfNotFound: true);
         characterController = GetComponent<CharacterController>();
         playerAiming = GetComponent<PlayerAiming>();
 
@@ -37,18 +39,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (cameraTransform == null) return;
 
-        var keyboard = Keyboard.current;
-        if (keyboard == null) return;
-
-        // Input
-        Vector2 input = Vector2.zero;
-
-        if (keyboard.wKey.isPressed) input.y += 1f;
-        if (keyboard.aKey.isPressed) input.x -= 1f;
-        if (keyboard.dKey.isPressed) input.x += 1f;
-        if (keyboard.sKey.isPressed) input.y -= 1f;
-
-        Vector3 inputDir = new Vector3(input.x, 0f, input.y).normalized;
+        // Input (WASD ou analógico esquerdo); ClampMagnitude mantém a intensidade do analógico
+        Vector2 input = moveAction.ReadValue<Vector2>();
+        Vector3 inputDir = Vector3.ClampMagnitude(new Vector3(input.x, 0f, input.y), 1f);
         bool hasInput = inputDir.sqrMagnitude > 0.01f;
 
         float cameraYaw = cameraTransform.eulerAngles.y;

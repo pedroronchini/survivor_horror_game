@@ -12,18 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02511a0ac791f1044a46c2f38585bf6b, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: Assembly-CSharp::InventoryData
-  slots:
-  - item: {fileID: 11400000, guid: f519137304a99c04bae6a58e5ae5da53, type: 2}
-    quantity: 2
-  - item: {fileID: 11400000, guid: 2afa20c4b9652d64eb5af7ab2dba7404, type: 2}
-    quantity: 1
-  - item: {fileID: 0}
-    quantity: 0
-  - item: {fileID: 0}
-    quantity: 0
-  - item: {fileID: 0}
-    quantity: 0
-  - item: {fileID: 0}
-    quantity: 0
   currentMaxSlots: 6
   absoluteMaxSlots: 10

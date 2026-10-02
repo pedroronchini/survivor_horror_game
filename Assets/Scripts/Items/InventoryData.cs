@@ -5,7 +5,8 @@ using System;
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory/InventoryData")]
 public class InventoryData : ScriptableObject
 {
-    public List<InventorySlot> slots;
+    // Estado de runtime: não é serializado, então jogar no Editor não altera o asset
+    [NonSerialized] public List<InventorySlot> slots = new List<InventorySlot>();
     public int currentMaxSlots = 6;
     public int absoluteMaxSlots = 10;
     public event Action hasChanged;
@@ -18,6 +19,8 @@ public class InventoryData : ScriptableObject
         {
             slots.Add(new InventorySlot());
         }
+
+        hasChanged?.Invoke();
     }
 
     public bool AdicionarItem(ItemData item)

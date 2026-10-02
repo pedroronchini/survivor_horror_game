@@ -24,7 +24,8 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private float shrinkDuration = 0.5f;
     [SerializeField] private float aimTimer = 0f;
 
-    private Mouse currentMouse;
+    private InputAction aimAction;
+    private InputAction attackAction;
     private Ray ray;
     private Transform cameraTransform;
 
@@ -35,6 +36,9 @@ public class PlayerAiming : MonoBehaviour
 
     private void Awake()
     {
+        aimAction = InputSystem.actions.FindAction("Player/Aim", throwIfNotFound: true);
+        attackAction = InputSystem.actions.FindAction("Player/Attack", throwIfNotFound: true);
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -47,9 +51,7 @@ public class PlayerAiming : MonoBehaviour
 
     private void Update()
     {
-        currentMouse = Mouse.current;
-
-        if (currentMouse.rightButton.isPressed)
+        if (aimAction.IsPressed())
         {
             isAiming = true;
             crosshair.SetActive(true);
@@ -85,7 +87,7 @@ public class PlayerAiming : MonoBehaviour
             thirdPersonFollow.CameraDistance = Mathf.Lerp(thirdPersonFollow.CameraDistance, targetDistance, Time.deltaTime * aimTransitionSpeed);
         }
 
-        if (currentMouse.leftButton.wasPressedThisFrame && currentMouse.rightButton.isPressed)
+        if (isAiming && attackAction.WasPressedThisFrame())
         {
             ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
