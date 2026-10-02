@@ -6,67 +6,83 @@ public class PlayerAiming : MonoBehaviour
 {
     public bool isAiming;
 
-    [SerializeField] private CinemachineCamera aimCamera;
+    [Header("Câmera")]
+    [SerializeField] private CinemachineCamera playerCamera;
+    private CinemachineThirdPersonFollow thirdPersonFollow;
+
+    [Header("Ajustes ao mirar")]
+    [SerializeField] private float normalCameraDistance = 1.5f;
+    [SerializeField] private float aimCameraDistance = 0.8f;
+    [SerializeField] private float normalFOV = 70f;
+    [SerializeField] private float aimFOV = 50f;
+    [SerializeField] private float aimTransitionSpeed = 8f;
 
     [SerializeField] private GameObject crosshair;
 
-    [SerializeField] private float crosshairSpreadMax = 25f; // porcentagem do tamanho da mira
-
-    [SerializeField] private float crosshairSpreadMin = 7f; // porcentagem do tamanho da mira
-
+    [SerializeField] private float crosshairSpreadMax = 25f;
+    [SerializeField] private float crosshairSpreadMin = 7f;
     [SerializeField] private float shrinkDuration = 0.5f;
-
     [SerializeField] private float aimTimer = 0f;
 
     private Mouse currentMouse;
-
     private Ray ray;
-
     private Transform cameraTransform;
 
     [SerializeField] private RectTransform segmentoCima;
-
     [SerializeField] private RectTransform segmentoBaixo;
-    
     [SerializeField] private RectTransform segmentoEsquerda;
-    
     [SerializeField] private RectTransform segmentoDireita;
 
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
-    private void Awake() {
         if (Camera.main != null)
             cameraTransform = Camera.main.transform;
+
+        if (playerCamera != null)
+            thirdPersonFollow = playerCamera.GetComponent<CinemachineThirdPersonFollow>();
     }
 
-    private void Update() {
+    private void Update()
+    {
         currentMouse = Mouse.current;
 
         if (currentMouse.rightButton.isPressed)
         {
-            aimCamera.Priority = 15;
             isAiming = true;
             crosshair.SetActive(true);
 
-            // Aumentando a mira conforme segura pro mais tempo
             aimTimer += Time.deltaTime;
-
             float progress = Mathf.Clamp01(aimTimer / shrinkDuration);
-
             float currentDistance = Mathf.Lerp(crosshairSpreadMax, crosshairSpreadMin, progress);
 
             segmentoCima.anchoredPosition = new Vector2(0, currentDistance);
             segmentoBaixo.anchoredPosition = new Vector2(0, -currentDistance);
             segmentoEsquerda.anchoredPosition = new Vector2(-currentDistance, 0);
             segmentoDireita.anchoredPosition = new Vector2(currentDistance, 0);
-        } else
+        }
+        else
         {
-            aimCamera.Priority = 5;
             isAiming = false;
             crosshair.SetActive(false);
-
-
-            // Voltando a mira padrão
             aimTimer = 0f;
+        }
+
+        // Transição suave da câmera entre normal e mirando
+        if (playerCamera != null)
+        {
+            float targetFOV = isAiming ? aimFOV : normalFOV;
+            var lens = playerCamera.Lens;
+            lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * aimTransitionSpeed);
+            playerCamera.Lens = lens;
+        }
+
+        if (thirdPersonFollow != null)
+        {
+            float targetDistance = isAiming ? aimCameraDistance : normalCameraDistance;
+            thirdPersonFollow.CameraDistance = Mathf.Lerp(thirdPersonFollow.CameraDistance, targetDistance, Time.deltaTime * aimTransitionSpeed);
         }
 
         if (currentMouse.leftButton.wasPressedThisFrame && currentMouse.rightButton.isPressed)

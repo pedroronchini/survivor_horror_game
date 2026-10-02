@@ -52,37 +52,28 @@ public class PlayerMovement : MonoBehaviour
         bool hasInput = inputDir.sqrMagnitude > 0.01f;
 
         float cameraYaw = cameraTransform.eulerAngles.y;
-        float targetAngle = Mathf.Atan2(inputDir.x, inputDir.z) * Mathf.Rad2Deg + cameraYaw;
 
         bool isAiming = playerAiming != null && playerAiming.isAiming;
 
-        if (isAiming || hasInput)
-        {
-            float desiredYaw = isAiming ? cameraYaw : targetAngle;
+        // O corpo sempre acompanha a direção da câmera (estilo câmera de ombro fixa)
+        float rotationStep = 1f - Mathf.Exp(-rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.Euler(0f, cameraYaw, 0f),
+            rotationStep
+        );
 
-            // 1 - Exp(...) torna a interpolação independente de frame
-            // Fração do angulo restante a percorrer neste frame.
-            // A forma exponencial mantém o giro idêntico em qualquer framerate.
-            float rotationStep = 1f - Mathf.Exp(-rotationSpeed * Time.deltaTime);
-
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                Quaternion.Euler(0f, desiredYaw, 0f),
-                rotationStep
-            );
-        }
-
-        // --- Movimento horizontal ---
+        // --- Movimento horizontal (relativo à câmera, tipo strafe) ---
         Vector3 horizontal = Vector3.zero;
         if (hasInput)
         {
             float speed = isAiming ? aimMoveSpeed : moveSpeed;
-            horizontal = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward * speed;
+            horizontal = Quaternion.Euler(0f, cameraYaw, 0f) * inputDir * speed;
         }
 
         // --- Gravidade ---
         if (characterController.isGrounded && verticalVelocity < 0f)
-            verticalVelocity = -2f;   // cola no chão, mantém isGrounded confiável
+            verticalVelocity = -2f;
         else
             verticalVelocity += Physics.gravity.y * Time.deltaTime;
 
@@ -91,6 +82,5 @@ public class PlayerMovement : MonoBehaviour
         motion.y = verticalVelocity;
 
         characterController.Move(motion * Time.deltaTime);
-
     }
 }

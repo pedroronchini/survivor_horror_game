@@ -4,37 +4,19 @@ public class ItemColetavel : MonoBehaviour, IInteractable
 {
     public ItemData itemData;
     public InventoryData inventory;
+    private bool itemHasAdded;
 
     public void Interact()
     {
-        // Debug.Log("Coletou: " + gameObject.name);
+        itemHasAdded = inventory.AdicionarItem(itemData);
 
-        // Destroy(gameObject);
-
-        if (itemData.isStackable)
+        if (itemHasAdded)
         {
-            foreach (var slot in inventory.slots)
-            {
-                if (slot.item == itemData && slot.quantity < itemData.maxStackSize)
-                {
-                    slot.quantity += 1;
-                    Destroy(gameObject);
-                    return;
-                }
-            }
-        }
-
-        foreach (var slot in inventory.slots)
+            Destroy(gameObject);
+        } else
         {
-            if (slot.item == null)
-            {
-                slot.item = itemData;
-                slot.quantity = 1;
-                Destroy(gameObject);
-                return;
-            }
+            Debug.Log("Inventário Cheio!");
         }
-
-        Debug.Log("Inventário Cheio!");
+        
     }
 }
