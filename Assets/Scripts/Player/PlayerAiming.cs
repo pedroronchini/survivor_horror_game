@@ -11,10 +11,10 @@ public class PlayerAiming : MonoBehaviour
     private CinemachineThirdPersonFollow thirdPersonFollow;
 
     [Header("Ajustes ao mirar")]
-    [SerializeField] private float normalCameraDistance = 2.8f;
+    [SerializeField] private float normalCameraDistance = 1.6f;
     [SerializeField] private float aimCameraDistance = 1.4f;
-    [SerializeField] private float normalFOV = 70f;
-    [SerializeField] private float aimFOV = 50f;
+    [SerializeField] private float normalFOV = 60f;
+    [SerializeField] private float aimFOV = 45f;
     [SerializeField] private float aimTransitionSpeed = 8f;
 
     [SerializeField] private GameObject crosshair;

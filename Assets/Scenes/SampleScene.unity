@@ -1060,7 +1060,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 70.6, y: 1.65, z: 10.6}
+  m_LocalPosition: {x: 70.4, y: 1.8499999, z: 10.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4034,10 +4034,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAiming
   isAiming: 0
   playerCamera: {fileID: 1715484127}
-  normalCameraDistance: 2.8
+  normalCameraDistance: 1.6
   aimCameraDistance: 1.4
-  normalFOV: 70
-  aimFOV: 50
+  normalFOV: 60
+  aimFOV: 45
   aimTransitionSpeed: 8
   crosshair: {fileID: 1760269161}
   crosshairSpreadMax: 25
@@ -8689,7 +8689,7 @@ Transform:
   m_GameObject: {fileID: 1715484122}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 70.6, y: 1.65, z: 10.6}
+  m_LocalPosition: {x: 70.4, y: 1.8499999, z: 10.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8794,7 +8794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.6, y: -0.7, z: 0.1}
+  ShoulderOffset: {x: 0.4, y: -0.5, z: 0.1}
   VerticalArmLength: 1.4
   CameraSide: 1
   CameraDistance: 1.5
