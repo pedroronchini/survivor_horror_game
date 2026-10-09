@@ -8,9 +8,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Camera mainCamera;
 
     [Header("Movimento")]
-    [SerializeField] private float moveSpeed = 4f;
+    [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float aimMoveSpeed = 1.2f;
     [SerializeField] private float rotationSpeed = 10f;
+
+    [Header("Multiplicadores de direção")]
+    [SerializeField, Range(0f, 1f)] private float strafeMultiplier = 0.75f; // andar de lado
+    [SerializeField, Range(0f, 1f)] private float backwardMultiplier = 0.6f; // andar de costas
 
     private CharacterController characterController;
     private Transform cameraTransform;
@@ -61,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         if (hasInput)
         {
             float speed = isAiming ? aimMoveSpeed : moveSpeed;
+            speed *= GetDirectionMultiplier(inputDir);
             horizontal = Quaternion.Euler(0f, cameraYaw, 0f) * inputDir * speed;
         }
 
@@ -75,5 +80,15 @@ public class PlayerMovement : MonoBehaviour
         motion.y = verticalVelocity;
 
         characterController.Move(motion * Time.deltaTime);
+    }
+
+    private float GetDirectionMultiplier(Vector3 direction)
+    {
+        float forwardAmount = direction.normalized.z;
+
+        if (forwardAmount >= 0f)
+            return Mathf.Lerp(strafeMultiplier, 1f, forwardAmount);
+
+        return Mathf.Lerp(strafeMultiplier, backwardMultiplier, -forwardAmount);
     }
 }
