@@ -6369,27 +6369,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238909375}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1259543363 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6568274409107380593, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
-  m_PrefabInstance: {fileID: 5862890508996479885}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1259543374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259543363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa60ac37f2d4df64d8947edc867bb0c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraFade
-  mainCamera: {fileID: 0}
-  cameraTarget: {fileID: 956360208}
-  limitDistance: 0.5
-  margin: 0.1
 --- !u!1 &1340679706
 GameObject:
   m_ObjectHideFlags: 0
@@ -10487,10 +10466,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6568274409107380593, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1259543374}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
