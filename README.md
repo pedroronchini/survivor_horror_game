@@ -2,7 +2,7 @@
 
 **English** · [Português](#português)
 
-A third-person survival horror game in development with Unity 6, inspired by *Resident Evil 2 Remake*, *Silent Hill* and classic science fiction.
+A personal project to learn game development: a third-person survival horror game made with Unity 6, inspired by *Resident Evil 2 Remake*, *Silent Hill* and classic science fiction. The goal is to release a playable demo on itch.io.
 
 In a future where humanity has long abandoned Earth, humanoid robots that were never capable of harming anyone start killing their owners. A detective follows their trail to a forgotten city on the planet everyone left behind, where exploration, scarce resources and environmental storytelling matter more than firepower.
 
@@ -30,7 +30,7 @@ Unity 6 (6000.5) · C# · Universal Render Pipeline · Input System · Cinemachi
 - [ ] Player health, damage, ammo and reloading
 - [ ] First robot enemy with a state machine (patrol, investigate, chase, attack)
 - [ ] Building interiors, fog, lighting and sound
-- [ ] Playable prototype on itch.io, full release on Steam
+- [ ] Playable demo on itch.io
 
 ### Credits
 
@@ -42,7 +42,7 @@ Character model and animations: [Mixamo](https://www.mixamo.com).
 
 **Português** · [English](#untitled-survival-horror-working-title)
 
-Um survival horror em terceira pessoa em desenvolvimento na Unity 6, inspirado em *Resident Evil 2 Remake*, *Silent Hill* e na ficção científica clássica.
+Um projeto pessoal para aprender desenvolvimento de jogos: um survival horror em terceira pessoa feito na Unity 6, inspirado em *Resident Evil 2 Remake*, *Silent Hill* e na ficção científica clássica. O objetivo é lançar uma demo jogável no itch.io.
 
 Num futuro em que a humanidade abandonou a Terra há muito tempo, robôs humanoides que nunca foram capazes de ferir ninguém começam a matar seus donos. Um detetive segue a trilha deles até uma cidade esquecida no planeta que todos deixaram para trás, onde exploração, recursos escassos e narrativa ambiental importam mais que poder de fogo.
 
@@ -70,7 +70,7 @@ Unity 6 (6000.5) · C# · Universal Render Pipeline · Input System · Cinemachi
 - [ ] Vida, dano, munição e recarga do jogador
 - [ ] Primeiro robô inimigo com máquina de estados (patrulhar, investigar, perseguir, atacar)
 - [ ] Interiores dos prédios, neblina, iluminação e som
-- [ ] Protótipo jogável no itch.io e lançamento completo na Steam
+- [ ] Demo jogável no itch.io
 
 ### Créditos
 
