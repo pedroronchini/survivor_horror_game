@@ -1,5 +1,7 @@
 # Untitled Survival Horror (working title)
 
+<img width="1624" height="886" alt="devlog01" src="https://github.com/user-attachments/assets/cd9eacc7-c3e6-4cbb-9eb8-e009ac6d15ae" />
+
 **English** · [Português](#português)
 
 A third-person survival horror game in development with Unity 6, inspired by *Resident Evil 2 Remake*, *Silent Hill* and classic science fiction.
