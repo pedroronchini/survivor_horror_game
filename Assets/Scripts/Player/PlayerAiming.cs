@@ -12,10 +12,12 @@ public class PlayerAiming : MonoBehaviour
 
     [Header("Ajustes ao mirar")]
     [SerializeField] private float normalCameraDistance = 1.6f;
-    [SerializeField] private float aimCameraDistance = 1.4f;
+    [SerializeField] private float aimCameraDistance = 1.6f;
     [SerializeField] private float normalFOV = 60f;
-    [SerializeField] private float aimFOV = 45f;
+    [SerializeField] private float aimFOV = 50f;
     [SerializeField] private float aimTransitionSpeed = 8f;
+    [SerializeField] private Vector3 normalShoulderOffset = new Vector3(0.4f, -1.1f, 0.1f);
+    [SerializeField] private Vector3 aimShoulderOffset = new Vector3(0.6f, -1.1f, 0.1f);
 
     [SerializeField] private GameObject crosshair;
 
@@ -85,6 +87,9 @@ public class PlayerAiming : MonoBehaviour
         {
             float targetDistance = isAiming ? aimCameraDistance : normalCameraDistance;
             thirdPersonFollow.CameraDistance = Mathf.Lerp(thirdPersonFollow.CameraDistance, targetDistance, Time.deltaTime * aimTransitionSpeed);
+
+            Vector3 targetOffset = isAiming ? aimShoulderOffset : normalShoulderOffset;                                                    
+            thirdPersonFollow.ShoulderOffset = Vector3.Lerp(thirdPersonFollow.ShoulderOffset, targetOffset, Time.deltaTime * aimTransitionSpeed);
         }
 
         if (isAiming && attackAction.WasPressedThisFrame())
