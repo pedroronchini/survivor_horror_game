@@ -466,11 +466,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   mainCamera: {fileID: 0}
+  cameraTarget: {fileID: 2520107560431537994}
   moveSpeed: 4
   aimMoveSpeed: 1.2
   rotationSpeed: 10
-  strafeMultiplier: 0.75
-  backwardMultiplier: 0.6
+  runSpeed: 6
+  strafeMultiplier: 0.7
+  backwardMultiplier: 0.45
 --- !u!135 &2216977117259263424
 SphereCollider:
   m_ObjectHideFlags: 0
