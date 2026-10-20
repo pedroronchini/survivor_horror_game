@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 8755781670046467344}
   - component: {fileID: 4593557961133429762}
   - component: {fileID: 2073287201869909029}
+  - component: {fileID: 6746150779875906300}
   m_Layer: 3
   m_Name: Personagem
   m_TagString: Untagged
@@ -594,6 +595,20 @@ MonoBehaviour:
   cameraTarget: {fileID: 2520107560431537994}
   limitDistance: 0.5
   margin: 0.1
+--- !u!114 &6746150779875906300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568274409107380593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d0e5bb76b9cd740bfc329055481562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerQuickTurn
+  panTilt: {fileID: 0}
+  turnDuration: 0.25
 --- !u!1 &8730136506909762261
 GameObject:
   m_ObjectHideFlags: 0
