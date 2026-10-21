@@ -1,5 +1,5 @@
-using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerAiming : MonoBehaviour
@@ -24,12 +24,9 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private float crosshairSpreadMax = 25f;
     [SerializeField] private float crosshairSpreadMin = 7f;
     [SerializeField] private float shrinkDuration = 0.5f;
-    [SerializeField] private float aimTimer = 0f;
+    private float aimTimer = 0f;
 
     private InputAction aimAction;
-    private InputAction attackAction;
-    private Ray ray;
-    private Transform cameraTransform;
 
     [SerializeField] private RectTransform segmentoCima;
     [SerializeField] private RectTransform segmentoBaixo;
@@ -39,13 +36,9 @@ public class PlayerAiming : MonoBehaviour
     private void Awake()
     {
         aimAction = InputSystem.actions.FindAction("Player/Aim", throwIfNotFound: true);
-        attackAction = InputSystem.actions.FindAction("Player/Attack", throwIfNotFound: true);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        if (Camera.main != null)
-            cameraTransform = Camera.main.transform;
 
         if (playerCamera != null)
             thirdPersonFollow = playerCamera.GetComponent<CinemachineThirdPersonFollow>();
@@ -88,18 +81,8 @@ public class PlayerAiming : MonoBehaviour
             float targetDistance = isAiming ? aimCameraDistance : normalCameraDistance;
             thirdPersonFollow.CameraDistance = Mathf.Lerp(thirdPersonFollow.CameraDistance, targetDistance, Time.deltaTime * aimTransitionSpeed);
 
-            Vector3 targetOffset = isAiming ? aimShoulderOffset : normalShoulderOffset;                                                    
+            Vector3 targetOffset = isAiming ? aimShoulderOffset : normalShoulderOffset;
             thirdPersonFollow.ShoulderOffset = Vector3.Lerp(thirdPersonFollow.ShoulderOffset, targetOffset, Time.deltaTime * aimTransitionSpeed);
-        }
-
-        if (isAiming && attackAction.WasPressedThisFrame())
-        {
-            ray = new Ray(cameraTransform.position, cameraTransform.forward);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~LayerMask.GetMask("Player")))
-            {
-                Debug.Log(hit.collider.gameObject.name);
-            }
         }
     }
 }
