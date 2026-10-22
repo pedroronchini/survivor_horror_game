@@ -21,6 +21,10 @@ public class PlayerShooting : MonoBehaviour
     private bool isReloading;
     private float reloadEndTime;
 
+    public int CurrentAmmo => currentAmmo;
+    public int ReserveAmmo => reserveAmmo;
+    public bool IsReloading => isReloading;
+
     private void Awake()
     {
         attackAction = InputSystem.actions.FindAction("Player/Attack", throwIfNotFound: true);
