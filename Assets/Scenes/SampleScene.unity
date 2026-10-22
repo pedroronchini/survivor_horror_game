@@ -7262,6 +7262,27 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1839442465313143197, guid: 2290f4a73a48c3848889fae1a51e51fb, type: 3}
   m_PrefabInstance: {fileID: 1465818973}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1497768744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6568274409107380593, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
+  m_PrefabInstance: {fileID: 5862890508996479885}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1497768758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497768744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c89fe822243a3b64b9a5ce9f0e605c65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
+  fireRate: 0.25
+  maxDistance: 100
+  magazineSize: 15
+  reserveAmmo: 30
 --- !u!1 &1506916203
 GameObject:
   m_ObjectHideFlags: 0
@@ -10470,7 +10491,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6568274409107380593, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1497768758}
   m_SourcePrefab: {fileID: 100100000, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
