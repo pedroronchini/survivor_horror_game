@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Multiplicadores de direção")]
     [SerializeField, Range(0f, 1f)] private float strafeMultiplier = 0.75f; // andar de lado
     [SerializeField, Range(0f, 1f)] private float backwardMultiplier = 0.6f; // andar de costas
-    
+
 
     private CharacterController characterController;
     private Transform cameraTransform;
@@ -52,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 inputDir = Vector3.ClampMagnitude(new Vector3(input.x, 0f, input.y), 1f);
         bool hasInput = inputDir.sqrMagnitude > 0.01f;
-        
+
         float cameraYaw = cameraTransform.eulerAngles.y;
+        float cameraPitch = cameraTransform.eulerAngles.x;
 
         bool isAiming = playerAiming != null && playerAiming.isAiming;
         bool isSprinting = sprintAction.IsPressed() && !isAiming && inputDir.z > 0.5f;
@@ -101,9 +102,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (cameraTarget != null)
         {
-            cameraTarget.rotation = Quaternion.Euler(0f, cameraYaw, 0f);
+            cameraTarget.rotation = Quaternion.Euler(cameraPitch, cameraYaw, 0f);
         }
-        
+
     }
 
     private float GetDirectionMultiplier(Vector3 direction)

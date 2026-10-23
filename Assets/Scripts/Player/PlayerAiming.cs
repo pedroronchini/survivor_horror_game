@@ -16,8 +16,8 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private float normalFOV = 60f;
     [SerializeField] private float aimFOV = 50f;
     [SerializeField] private float aimTransitionSpeed = 8f;
-    [SerializeField] private Vector3 normalShoulderOffset = new Vector3(0.4f, -1.1f, 0.1f);
-    [SerializeField] private Vector3 aimShoulderOffset = new Vector3(0.6f, -1.1f, 0.1f);
+    [SerializeField] private Vector3 normalShoulderOffset = new Vector3(0.4f, 0f, 0.1f);
+    [SerializeField] private Vector3 aimShoulderOffset = new Vector3(0.6f, 0f, 0.1f);
 
     [SerializeField] private GameObject crosshair;
 
