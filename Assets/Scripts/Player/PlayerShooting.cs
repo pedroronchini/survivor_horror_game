@@ -12,6 +12,13 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private int reserveAmmo = 30; // Balas na reserva no começo
     [SerializeField] private float reloadDuration = 1.5f;
 
+    [Header("Efeitos")]
+    [SerializeField] private Transform muzzlePoint;
+    [SerializeField] private GameObject muzzleFlashPrefab;
+    [SerializeField] private GameObject impactPrefab;
+    [SerializeField] private float flashDuration = 0.05f;
+    [SerializeField] private float impactLifetime = 10f;
+
     private InputAction attackAction;
     private PlayerAiming playerAiming;
     private Transform cameraTransform;
@@ -79,11 +86,25 @@ public class PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
+        if (muzzleFlashPrefab != null && muzzlePoint != null)
+        {
+            GameObject flash = Instantiate(muzzleFlashPrefab, muzzlePoint.position, muzzlePoint.rotation, muzzlePoint);
+
+            Destroy(flash, flashDuration);
+        }
+
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, ~LayerMask.GetMask("Player")))
         {
             // Acertou algo
+            if (impactPrefab != null)
+            {
+                GameObject impactInstance = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(-hit.normal));
+
+                Destroy(impactInstance, impactLifetime);
+            }
+
             Debug.Log(hit.collider.gameObject.name);
             Debug.DrawLine(cameraTransform.position, hit.point, Color.red, 1f);
         }
