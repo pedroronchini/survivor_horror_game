@@ -1,6 +1,8 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -48,6 +50,12 @@ public class PlayerShooting : MonoBehaviour
     public int ReserveAmmo => reserveAmmo;
     public bool IsReloading => isReloading;
 
+    public event Action Fired;
+    public event Action DryFired;
+    public event Action ReloadStarted;
+    public event Action ReloadCancelled;
+    public event Action ReloadFinished;
+
     private void Awake()
     {
         attackAction = InputSystem.actions.FindAction("Player/Attack", throwIfNotFound: true);
@@ -78,11 +86,8 @@ public class PlayerShooting : MonoBehaviour
 
     private void HandleReload(bool isAiming)
     {
-        if (reloadAction.WasPressedThisFrame() && !isReloading && currentAmmo < magazineSize && reserveAmmo > 0 && isAiming)
-        {
-            isReloading = true;
-            reloadEndTime = Time.time + reloadDuration;
-        }
+        if (reloadAction.WasPressedThisFrame() && CanStartReload(isAiming))
+            StartReload();
 
         if (isReloading && !isAiming)
             CancelReload();
@@ -91,9 +96,23 @@ public class PlayerShooting : MonoBehaviour
             FinishReload();
     }
 
+    private bool CanStartReload(bool isAiming)
+    {
+        return isAiming && !isReloading && currentAmmo < magazineSize && reserveAmmo > 0;
+    }
+
+    private void StartReload()
+    {
+        isReloading = true;
+        reloadEndTime = Time.time + reloadDuration;
+
+        ReloadStarted?.Invoke();
+    }
+
     private void CancelReload()
     {
         isReloading = false;
+        ReloadCancelled?.Invoke();
     }
 
     private void FinishReload()
@@ -104,6 +123,8 @@ public class PlayerShooting : MonoBehaviour
         reserveAmmo -= transferBullets;
         currentAmmo += transferBullets;
         isReloading = false;
+
+        ReloadFinished?.Invoke();
     }
 
     private void HandleFire(bool isAiming)
@@ -113,15 +134,18 @@ public class PlayerShooting : MonoBehaviour
         if (currentAmmo > 0)
         {
             Shoot();
-            currentAmmo--;
             ApplyCameraRecoil();
+
+            currentAmmo--;
+
+            Fired?.Invoke();
 
             if (playerAiming != null)
                 playerAiming.ApplyRecoil();
         }
         else
         {
-            // TODO: Som de clique vazio
+            DryFired?.Invoke();
         }
 
         nextFireTime = Time.time + fireRate;
