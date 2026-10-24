@@ -24,6 +24,7 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private float crosshairSpreadMax = 25f;
     [SerializeField] private float crosshairSpreadMin = 7f;
     [SerializeField] private float shrinkDuration = 0.5f;
+    [SerializeField] private float recoilCrosshairKick = 0.25f;
     private float aimTimer = 0f;
 
     private InputAction aimAction;
@@ -32,6 +33,7 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private RectTransform segmentoBaixo;
     [SerializeField] private RectTransform segmentoEsquerda;
     [SerializeField] private RectTransform segmentoDireita;
+
 
     private void Awake()
     {
@@ -51,7 +53,7 @@ public class PlayerAiming : MonoBehaviour
             isAiming = true;
             crosshair.SetActive(true);
 
-            aimTimer += Time.deltaTime;
+            aimTimer = Mathf.Min(aimTimer + Time.deltaTime, shrinkDuration);
             float progress = Mathf.Clamp01(aimTimer / shrinkDuration);
             float currentDistance = Mathf.Lerp(crosshairSpreadMax, crosshairSpreadMin, progress);
 
@@ -84,5 +86,10 @@ public class PlayerAiming : MonoBehaviour
             Vector3 targetOffset = isAiming ? aimShoulderOffset : normalShoulderOffset;
             thirdPersonFollow.ShoulderOffset = Vector3.Lerp(thirdPersonFollow.ShoulderOffset, targetOffset, Time.deltaTime * aimTransitionSpeed);
         }
+    }
+
+    public void ApplyRecoil()
+    {
+        aimTimer = Mathf.Max(0f, aimTimer - recoilCrosshairKick);
     }
 }

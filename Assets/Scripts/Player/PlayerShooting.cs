@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +19,11 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GameObject impactPrefab;
     [SerializeField] private float flashDuration = 0.05f;
     [SerializeField] private float impactLifetime = 10f;
+
+    [Header("Recuo")]
+    [SerializeField] private CinemachinePanTilt panTilt;
+    [SerializeField] private float recoilPitch = 1.5f;
+    [SerializeField] private float recoilYaw = 0.5f;
 
     private InputAction attackAction;
     private PlayerAiming playerAiming;
@@ -40,6 +46,10 @@ public class PlayerShooting : MonoBehaviour
 
         if (Camera.main != null)
             cameraTransform = Camera.main.transform;
+
+        if (panTilt == null)
+            panTilt = FindAnyObjectByType<CinemachinePanTilt>();
+
     }
 
     private void Start()
@@ -71,6 +81,11 @@ public class PlayerShooting : MonoBehaviour
             {
                 Shoot();
                 currentAmmo--;
+                ApplyCameraRecoil();
+
+                if (playerAiming != null)
+                    playerAiming.ApplyRecoil();
+
                 Debug.Log($"Pente: {currentAmmo} / Reserva: {reserveAmmo}");
             }
             else
@@ -125,5 +140,14 @@ public class PlayerShooting : MonoBehaviour
         isReloading = false;
 
         Debug.Log($"Contagem nova: Pente: {currentAmmo} / Reserva: {reserveAmmo}");
+    }
+
+    private void ApplyCameraRecoil()
+    {
+        if (panTilt == null) return;
+
+        panTilt.TiltAxis.Value = Mathf.Clamp(panTilt.TiltAxis.Value - recoilPitch, panTilt.TiltAxis.Range.x, panTilt.TiltAxis.Range.y);
+
+        panTilt.PanAxis.Value = panTilt.PanAxis.Value + Random.Range(-recoilYaw, recoilYaw);
     }
 }
