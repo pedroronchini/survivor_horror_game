@@ -1,12 +1,14 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
+using UnityEngine.Serialization;
 
 public class PauseMenuManager : MonoBehaviour
 {
     public static bool IsPaused { get; private set; }
 
-    [SerializeField] private GameObject painel;
+    [FormerlySerializedAs("painel")]
+    [SerializeField] private GameObject pausePanel;
 
     // O Cinemachine reativa a ação Look sozinho (AutoEnableInputs), então desligamos o controlador
     [SerializeField] private CinemachineInputAxisController cameraInput;
@@ -23,7 +25,7 @@ public class PauseMenuManager : MonoBehaviour
             cameraInput = FindAnyObjectByType<CinemachineInputAxisController>();
     }
 
-    void Update()
+    private void Update()
     {
         if (pauseAction.WasPressedThisFrame())
         {
@@ -34,12 +36,21 @@ public class PauseMenuManager : MonoBehaviour
     public void SetPaused(bool paused)
     {
         IsPaused = paused;
-        painel.SetActive(paused);
+
+        if (pausePanel != null)
+            pausePanel.SetActive(paused);
+
         Time.timeScale = paused ? 0f : 1f;
 
         // Desliga todo o input de gameplay (mover, mirar, atirar, interagir) enquanto pausado
-        if (paused) playerMap.Disable();
-        else playerMap.Enable();
+        if (paused)
+        {
+            playerMap.Disable();
+        }
+        else
+        {
+            playerMap.Enable();
+        }
 
         if (cameraInput != null)
             cameraInput.enabled = !paused;
