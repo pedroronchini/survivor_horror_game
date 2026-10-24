@@ -1,5 +1,5 @@
-using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine;
 
 public class CameraSensitivity : MonoBehaviour
 {
@@ -7,7 +7,8 @@ public class CameraSensitivity : MonoBehaviour
 
     private CinemachineInputAxisController axisController;
 
-    private void Awake() {
+    private void Awake()
+    {
         axisController = GetComponent<CinemachineInputAxisController>();
 
         foreach (var axis in axisController.Controllers)
