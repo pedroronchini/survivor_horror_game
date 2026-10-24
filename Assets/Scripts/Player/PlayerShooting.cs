@@ -7,10 +7,14 @@ public class PlayerShooting : MonoBehaviour
     [Header("Tiro")]
     [SerializeField] private float fireRate = 0.25f;
     [SerializeField] private float maxDistance = 100f;
+    [Tooltip("Camadas que o tiro pode acertar (deixe o Player de fora)")]
+    [SerializeField] private LayerMask hitMask;
 
     [Header("Munição")]
-    [SerializeField] private int magazineSize = 15; // Capacidade do pente
-    [SerializeField] private int reserveAmmo = 30; // Balas na reserva no começo
+    [Tooltip("Capacidade do pente")]
+    [SerializeField] private int magazineSize = 15;
+    [Tooltip("Balas na reserva no começo")]
+    [SerializeField] private int reserveAmmo = 30;
     [SerializeField] private float reloadDuration = 1.5f;
 
     [Header("Efeitos")]
@@ -25,12 +29,18 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float recoilPitch = 1.5f;
     [SerializeField] private float recoilYaw = 0.5f;
 
+    [Header("Debug")]
+    [SerializeField] private bool debugDraw;
+
+    private const float ImpactSurfaceOffset = 0.01f;
+    private const float DebugLineDuration = 1f;
+
     private InputAction attackAction;
+    private InputAction reloadAction;
     private PlayerAiming playerAiming;
     private Transform cameraTransform;
     private float nextFireTime;
     private int currentAmmo; // Balas no pente agora
-    private InputAction reloadAction;
     private bool isReloading;
     private float reloadEndTime;
 
@@ -49,7 +59,6 @@ public class PlayerShooting : MonoBehaviour
 
         if (panTilt == null)
             panTilt = FindAnyObjectByType<CinemachinePanTilt>();
-
     }
 
     private void Start()
@@ -61,42 +70,53 @@ public class PlayerShooting : MonoBehaviour
     {
         if (cameraTransform == null) return;
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        HandleReload();
+        HandleFire();
+    }
 
+    private void HandleReload()
+    {
         if (reloadAction.WasPressedThisFrame() && !isReloading && currentAmmo < magazineSize && reserveAmmo > 0)
         {
             isReloading = true;
             reloadEndTime = Time.time + reloadDuration;
-            Debug.Log("Recarregando...");
         }
 
         if (isReloading && Time.time >= reloadEndTime)
-        {
             FinishReload();
-        }
+    }
 
-        if (isAiming && attackAction.WasPressedThisFrame() && Time.time >= nextFireTime && !isReloading)
+    private void FinishReload()
+    {
+        int missingBullets = magazineSize - currentAmmo;
+        int transferBullets = Mathf.Min(missingBullets, reserveAmmo);
+
+        reserveAmmo -= transferBullets;
+        currentAmmo += transferBullets;
+        isReloading = false;
+    }
+
+    private void HandleFire()
+    {
+        bool isAiming = playerAiming != null && playerAiming.isAiming;
+
+        if (!isAiming || !attackAction.WasPressedThisFrame() || Time.time < nextFireTime || isReloading) return;
+
+        if (currentAmmo > 0)
         {
-            if (currentAmmo > 0)
-            {
-                Shoot();
-                currentAmmo--;
-                ApplyCameraRecoil();
+            Shoot();
+            currentAmmo--;
+            ApplyCameraRecoil();
 
-                if (playerAiming != null)
-                    playerAiming.ApplyRecoil();
-
-                Debug.Log($"Pente: {currentAmmo} / Reserva: {reserveAmmo}");
-            }
-            else
-            {
-                Debug.Log("Sem munição");
-            }
-
-            nextFireTime = Time.time + fireRate;
+            if (playerAiming != null)
+                playerAiming.ApplyRecoil();
+        }
+        else
+        {
+            // TODO: Som de clique vazio
         }
 
-
+        nextFireTime = Time.time + fireRate;
     }
 
     private void Shoot()
@@ -110,36 +130,28 @@ public class PlayerShooting : MonoBehaviour
 
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, ~LayerMask.GetMask("Player")))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, hitMask))
         {
             // Acertou algo
             if (impactPrefab != null)
             {
-                GameObject impactInstance = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(-hit.normal));
+                GameObject impactInstance = Instantiate(impactPrefab, hit.point + hit.normal * ImpactSurfaceOffset, Quaternion.LookRotation(-hit.normal));
 
                 Destroy(impactInstance, impactLifetime);
             }
 
-            Debug.Log(hit.collider.gameObject.name);
-            Debug.DrawLine(cameraTransform.position, hit.point, Color.red, 1f);
+            if (debugDraw)
+            {
+                Debug.Log(hit.collider.gameObject.name);
+                Debug.DrawLine(cameraTransform.position, hit.point, Color.red, DebugLineDuration);
+            }
         }
         else
         {
-            // Não acertou nada 
-            Debug.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * maxDistance, Color.yellow, 1f);
+            // Não acertou nada
+            if (debugDraw)
+                Debug.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * maxDistance, Color.yellow, DebugLineDuration);
         }
-    }
-
-    private void FinishReload()
-    {
-        int missingBullets = magazineSize - currentAmmo;
-        int transferBullets = Mathf.Min(missingBullets, reserveAmmo);
-
-        reserveAmmo -= transferBullets;
-        currentAmmo += transferBullets;
-        isReloading = false;
-
-        Debug.Log($"Contagem nova: Pente: {currentAmmo} / Reserva: {reserveAmmo}");
     }
 
     private void ApplyCameraRecoil()
@@ -148,6 +160,6 @@ public class PlayerShooting : MonoBehaviour
 
         panTilt.TiltAxis.Value = Mathf.Clamp(panTilt.TiltAxis.Value - recoilPitch, panTilt.TiltAxis.Range.x, panTilt.TiltAxis.Range.y);
 
-        panTilt.PanAxis.Value = panTilt.PanAxis.Value + Random.Range(-recoilYaw, recoilYaw);
+        panTilt.PanAxis.Value += Random.Range(-recoilYaw, recoilYaw);
     }
 }

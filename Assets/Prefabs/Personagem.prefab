@@ -505,6 +505,7 @@ MonoBehaviour:
   aimMoveSpeed: 1.2
   rotationSpeed: 10
   runSpeed: 6
+  sprintForwardThreshold: 0.5
   strafeMultiplier: 0.7
   backwardMultiplier: 0.45
 --- !u!135 &2216977117259263424
@@ -567,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446695c5aa6c64442b6c8eb755607829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  textoInteracao: {fileID: 0}
+  interactionPrompt: {fileID: 0}
 --- !u!114 &8755781670046467344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,6 +594,7 @@ MonoBehaviour:
   crosshairSpreadMax: 25
   crosshairSpreadMin: 7
   shrinkDuration: 0.5
+  recoilCrosshairKick: 0.25
   segmentoCima: {fileID: 0}
   segmentoBaixo: {fileID: 0}
   segmentoEsquerda: {fileID: 0}
@@ -610,7 +612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimation
   playerAnimator: {fileID: 0}
-  suavizacao: 0.1
+  animationDamping: 0.1
 --- !u!114 &2073287201869909029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerQuickTurn
   panTilt: {fileID: 0}
   turnDuration: 0.25
+  backInputThreshold: 0.5
 --- !u!114 &1630413046126904305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,6 +658,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
   fireRate: 0.25
   maxDistance: 100
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 55
   magazineSize: 15
   reserveAmmo: 30
   reloadDuration: 1.5
@@ -663,6 +669,10 @@ MonoBehaviour:
   impactPrefab: {fileID: 1501623791977770401, guid: 1535412ffe492cd46a50be70beb73bd2, type: 3}
   flashDuration: 0.05
   impactLifetime: 10
+  panTilt: {fileID: 0}
+  recoilPitch: 1.5
+  recoilYaw: 0.5
+  debugDraw: 0
 --- !u!1 &8730136506909762261
 GameObject:
   m_ObjectHideFlags: 0

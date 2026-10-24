@@ -8611,7 +8611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2908391a217d0b143b45abbfacf939d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenuManager
-  painel: {fileID: 1761064722}
+  pausePanel: {fileID: 1761064722}
   cameraInput: {fileID: 0}
 --- !u!1 &1741533840
 GameObject:
@@ -10549,10 +10549,6 @@ PrefabInstance:
       propertyPath: panTilt
       value: 
       objectReference: {fileID: 1715484131}
-    - target: {fileID: 7045453482059242760, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
-      propertyPath: textoInteracao
-      value: 
-      objectReference: {fileID: 1744193835}
     - target: {fileID: 7045453482059242760, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
       propertyPath: interactionPrompt
       value: 
