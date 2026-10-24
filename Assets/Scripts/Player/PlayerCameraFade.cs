@@ -13,7 +13,7 @@ public class PlayerCameraFade : MonoBehaviour
     [SerializeField] private float margin = 0.1f;
 
     private SkinnedMeshRenderer[] renderers;
-    private bool isHidden = false;              // como o personagem ESTÁ agora
+    private bool isHidden; // como o personagem ESTÁ agora
 
     private void Awake()
     {
@@ -50,9 +50,9 @@ public class PlayerCameraFade : MonoBehaviour
     {
         ShadowCastingMode mode = hide ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
 
-        foreach (SkinnedMeshRenderer render in renderers)
+        foreach (SkinnedMeshRenderer meshRenderer in renderers)
         {
-            render.shadowCastingMode = mode;
+            meshRenderer.shadowCastingMode = mode;
         }
     }
 }
