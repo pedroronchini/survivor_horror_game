@@ -70,20 +70,30 @@ public class PlayerShooting : MonoBehaviour
     {
         if (cameraTransform == null) return;
 
-        HandleReload();
-        HandleFire();
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
+
+        HandleReload(isAiming);
+        HandleFire(isAiming);
     }
 
-    private void HandleReload()
+    private void HandleReload(bool isAiming)
     {
-        if (reloadAction.WasPressedThisFrame() && !isReloading && currentAmmo < magazineSize && reserveAmmo > 0)
+        if (reloadAction.WasPressedThisFrame() && !isReloading && currentAmmo < magazineSize && reserveAmmo > 0 && isAiming)
         {
             isReloading = true;
             reloadEndTime = Time.time + reloadDuration;
         }
 
+        if (isReloading && !isAiming)
+            CancelReload();
+
         if (isReloading && Time.time >= reloadEndTime)
             FinishReload();
+    }
+
+    private void CancelReload()
+    {
+        isReloading = false;
     }
 
     private void FinishReload()
@@ -96,10 +106,8 @@ public class PlayerShooting : MonoBehaviour
         isReloading = false;
     }
 
-    private void HandleFire()
+    private void HandleFire(bool isAiming)
     {
-        bool isAiming = playerAiming != null && playerAiming.IsAiming;
-
         if (!isAiming || !attackAction.WasPressedThisFrame() || Time.time < nextFireTime || isReloading) return;
 
         if (currentAmmo > 0)
