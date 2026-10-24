@@ -9,15 +9,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform cameraTarget;
 
     [Header("Movimento")]
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float aimMoveSpeed = 1.2f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float runSpeed = 6f;
+    [Tooltip("Quanto o input precisa estar para frente para permitir correr")]
+    [SerializeField, Range(0f, 1f)] private float sprintForwardThreshold = 0.5f;
 
     [Header("Multiplicadores de direção")]
-    [SerializeField, Range(0f, 1f)] private float strafeMultiplier = 0.75f; // andar de lado
-    [SerializeField, Range(0f, 1f)] private float backwardMultiplier = 0.6f; // andar de costas
+    [SerializeField, Range(0f, 1f)] private float strafeMultiplier = 0.7f; // andar de lado
+    [SerializeField, Range(0f, 1f)] private float backwardMultiplier = 0.45f; // andar de costas
 
+    private const float GroundedVerticalVelocity = -2f;
+    private const float InputDeadZoneSqr = 0.01f;
 
     private CharacterController characterController;
     private Transform cameraTransform;
@@ -51,13 +55,13 @@ public class PlayerMovement : MonoBehaviour
         // Input (WASD ou analógico esquerdo); ClampMagnitude mantém a intensidade do analógico
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 inputDir = Vector3.ClampMagnitude(new Vector3(input.x, 0f, input.y), 1f);
-        bool hasInput = inputDir.sqrMagnitude > 0.01f;
+        bool hasInput = inputDir.sqrMagnitude > InputDeadZoneSqr;
 
         float cameraYaw = cameraTransform.eulerAngles.y;
         float cameraPitch = cameraTransform.eulerAngles.x;
 
         bool isAiming = playerAiming != null && playerAiming.isAiming;
-        bool isSprinting = sprintAction.IsPressed() && !isAiming && inputDir.z > 0.5f;
+        bool isSprinting = sprintAction.IsPressed() && !isAiming && inputDir.z > sprintForwardThreshold;
 
         float targetYaw = cameraYaw;
 
@@ -67,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // O corpo sempre acompanha a direção da câmera (estilo câmera de ombro fixa) quando não está correndo
+        // Quando está correndo ele vira para a direção do movimento
         float rotationStep = 1f - Mathf.Exp(-rotationSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
@@ -90,9 +95,13 @@ public class PlayerMovement : MonoBehaviour
 
         // --- Gravidade ---
         if (characterController.isGrounded && verticalVelocity < 0f)
-            verticalVelocity = -2f;
+        {
+            verticalVelocity = GroundedVerticalVelocity;
+        }
         else
+        {
             verticalVelocity += Physics.gravity.y * Time.deltaTime;
+        }
 
         // --- Aplicação (uma única chamada de Move) ---
         Vector3 motion = horizontal;
@@ -104,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraTarget.rotation = Quaternion.Euler(cameraPitch, cameraYaw, 0f);
         }
-
     }
 
     private float GetDirectionMultiplier(Vector3 direction)
@@ -120,14 +128,10 @@ public class PlayerMovement : MonoBehaviour
     private float GetCurrentSpeed(bool isAiming, bool isSprinting)
     {
         if (isAiming)
-        {
             return aimMoveSpeed;
-        }
 
         if (isSprinting)
-        {
             return runSpeed;
-        }
 
         return moveSpeed;
     }
