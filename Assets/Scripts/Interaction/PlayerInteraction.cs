@@ -3,45 +3,49 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-   private IInteractable nextItem;
+    [SerializeField] private GameObject interactionPrompt;
 
-   private InputAction interactAction;
+    private IInteractable currentInteractable;
+    private InputAction interactAction;
 
-   [SerializeField] private GameObject textoInteracao;
-
-   private void Awake()
+    private void Awake()
     {
         interactAction = InputSystem.actions.FindAction("Player/Interact", throwIfNotFound: true);
     }
 
-   private void OnTriggerEnter(Collider other) {
-        if (other.TryGetComponent<IInteractable>(out var interactable))
-        {
-            nextItem = interactable;
-            textoInteracao.SetActive(true);
-        }
-   }
-
-   private void OnTriggerExit(Collider other) {
-        if (other.TryGetComponent<IInteractable>(out var interactable))
-        {
-            if (nextItem == interactable)
-            {
-                nextItem = null;
-                textoInteracao.SetActive(false);
-            }
-
-        }
-   }
-
-   private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (interactAction.WasPressedThisFrame() && nextItem != null)
+        if (other.TryGetComponent<IInteractable>(out var interactable))
         {
-            nextItem.Interact();
-            textoInteracao.SetActive(false);
-
-            nextItem = null;
+            currentInteractable = interactable;
+            SetPromptVisible(true);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<IInteractable>(out var interactable) && currentInteractable == interactable)
+        {
+            currentInteractable = null;
+            SetPromptVisible(false);
+        }
+    }
+
+    private void Update()
+    {
+        if (interactAction.WasPressedThisFrame() && currentInteractable != null)
+        {
+            currentInteractable.Interact();
+            SetPromptVisible(false);
+
+            currentInteractable = null;
+        }
+    }
+
+    private void SetPromptVisible(bool visible)
+    {
+        if (interactionPrompt == null) return;
+
+        interactionPrompt.SetActive(visible);
     }
 }

@@ -10553,6 +10553,10 @@ PrefabInstance:
       propertyPath: textoInteracao
       value: 
       objectReference: {fileID: 1744193835}
+    - target: {fileID: 7045453482059242760, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
+      propertyPath: interactionPrompt
+      value: 
+      objectReference: {fileID: 1744193835}
     - target: {fileID: 7393127820021380905, guid: 63083025ecfa21d469b38618ac1ad5e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 70
