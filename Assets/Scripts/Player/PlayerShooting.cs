@@ -98,7 +98,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void HandleFire()
     {
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
 
         if (!isAiming || !attackAction.WasPressedThisFrame() || Time.time < nextFireTime || isReloading) return;
 

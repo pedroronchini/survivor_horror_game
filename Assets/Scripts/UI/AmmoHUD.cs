@@ -24,7 +24,7 @@ public class AmmoHUD : MonoBehaviour
     {
         if (ammoText == null || playerShooting == null) return;
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
 
         ammoText.gameObject.SetActive(isAiming);
 

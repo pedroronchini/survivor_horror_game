@@ -32,7 +32,7 @@ public class PlayerAimIK : MonoBehaviour
     {
         if (animator == null || cameraTransform == null) return;
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
         float target = isAiming ? 1f : 0f;
 
         currentWeight = Mathf.MoveTowards(currentWeight, target, blendSpeed * Time.deltaTime);

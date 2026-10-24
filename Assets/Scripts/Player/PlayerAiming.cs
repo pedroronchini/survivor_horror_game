@@ -1,14 +1,12 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerAiming : MonoBehaviour
 {
-    public bool isAiming;
-
     [Header("Câmera")]
     [SerializeField] private CinemachineCamera playerCamera;
-    private CinemachineThirdPersonFollow thirdPersonFollow;
 
     [Header("Ajustes ao mirar")]
     [SerializeField] private float normalCameraDistance = 1.6f;
@@ -19,21 +17,27 @@ public class PlayerAiming : MonoBehaviour
     [SerializeField] private Vector3 normalShoulderOffset = new Vector3(0.4f, 0f, 0.1f);
     [SerializeField] private Vector3 aimShoulderOffset = new Vector3(0.6f, 0f, 0.1f);
 
+    [Header("Retícula")]
     [SerializeField] private GameObject crosshair;
-
     [SerializeField] private float crosshairSpreadMax = 25f;
     [SerializeField] private float crosshairSpreadMin = 7f;
     [SerializeField] private float shrinkDuration = 0.5f;
     [SerializeField] private float recoilCrosshairKick = 0.25f;
-    private float aimTimer = 0f;
 
+    [FormerlySerializedAs("segmentoCima")]
+    [SerializeField] private RectTransform crosshairTop;
+    [FormerlySerializedAs("segmentoBaixo")]
+    [SerializeField] private RectTransform crosshairBottom;
+    [FormerlySerializedAs("segmentoEsquerda")]
+    [SerializeField] private RectTransform crosshairLeft;
+    [FormerlySerializedAs("segmentoDireita")]
+    [SerializeField] private RectTransform crosshairRight;
+
+    private CinemachineThirdPersonFollow thirdPersonFollow;
     private InputAction aimAction;
+    private float aimTimer;
 
-    [SerializeField] private RectTransform segmentoCima;
-    [SerializeField] private RectTransform segmentoBaixo;
-    [SerializeField] private RectTransform segmentoEsquerda;
-    [SerializeField] private RectTransform segmentoDireita;
-
+    public bool IsAiming { get; private set; }
 
     private void Awake()
     {
@@ -48,31 +52,42 @@ public class PlayerAiming : MonoBehaviour
 
     private void Update()
     {
+        UpdateAimState();
+        UpdateCamera();
+    }
+
+    public void ApplyRecoil()
+    {
+        aimTimer = Mathf.Max(0f, aimTimer - recoilCrosshairKick);
+    }
+
+    private void UpdateAimState()
+    {
         if (aimAction.IsPressed())
         {
-            isAiming = true;
-            crosshair.SetActive(true);
+            IsAiming = true;
+            SetCrosshairVisible(true);
 
             aimTimer = Mathf.Min(aimTimer + Time.deltaTime, shrinkDuration);
             float progress = Mathf.Clamp01(aimTimer / shrinkDuration);
             float currentDistance = Mathf.Lerp(crosshairSpreadMax, crosshairSpreadMin, progress);
 
-            segmentoCima.anchoredPosition = new Vector2(0, currentDistance);
-            segmentoBaixo.anchoredPosition = new Vector2(0, -currentDistance);
-            segmentoEsquerda.anchoredPosition = new Vector2(-currentDistance, 0);
-            segmentoDireita.anchoredPosition = new Vector2(currentDistance, 0);
+            SetCrosshairSpread(currentDistance);
         }
         else
         {
-            isAiming = false;
-            crosshair.SetActive(false);
+            IsAiming = false;
+            SetCrosshairVisible(false);
             aimTimer = 0f;
         }
+    }
 
+    private void UpdateCamera()
+    {
         // Transição suave da câmera entre normal e mirando
         if (playerCamera != null)
         {
-            float targetFOV = isAiming ? aimFOV : normalFOV;
+            float targetFOV = IsAiming ? aimFOV : normalFOV;
             var lens = playerCamera.Lens;
             lens.FieldOfView = Mathf.Lerp(lens.FieldOfView, targetFOV, Time.deltaTime * aimTransitionSpeed);
             playerCamera.Lens = lens;
@@ -80,16 +95,28 @@ public class PlayerAiming : MonoBehaviour
 
         if (thirdPersonFollow != null)
         {
-            float targetDistance = isAiming ? aimCameraDistance : normalCameraDistance;
+            float targetDistance = IsAiming ? aimCameraDistance : normalCameraDistance;
             thirdPersonFollow.CameraDistance = Mathf.Lerp(thirdPersonFollow.CameraDistance, targetDistance, Time.deltaTime * aimTransitionSpeed);
 
-            Vector3 targetOffset = isAiming ? aimShoulderOffset : normalShoulderOffset;
+            Vector3 targetOffset = IsAiming ? aimShoulderOffset : normalShoulderOffset;
             thirdPersonFollow.ShoulderOffset = Vector3.Lerp(thirdPersonFollow.ShoulderOffset, targetOffset, Time.deltaTime * aimTransitionSpeed);
         }
     }
 
-    public void ApplyRecoil()
+    private void SetCrosshairVisible(bool visible)
     {
-        aimTimer = Mathf.Max(0f, aimTimer - recoilCrosshairKick);
+        if (crosshair == null) return;
+
+        crosshair.SetActive(visible);
+    }
+
+    private void SetCrosshairSpread(float distance)
+    {
+        if (crosshairTop == null || crosshairBottom == null || crosshairLeft == null || crosshairRight == null) return;
+
+        crosshairTop.anchoredPosition = new Vector2(0, distance);
+        crosshairBottom.anchoredPosition = new Vector2(0, -distance);
+        crosshairLeft.anchoredPosition = new Vector2(-distance, 0);
+        crosshairRight.anchoredPosition = new Vector2(distance, 0);
     }
 }

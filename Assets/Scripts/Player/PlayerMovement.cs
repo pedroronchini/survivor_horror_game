@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         float cameraYaw = cameraTransform.eulerAngles.y;
         float cameraPitch = cameraTransform.eulerAngles.x;
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
         bool isSprinting = sprintAction.IsPressed() && !isAiming && inputDir.z > sprintForwardThreshold;
 
         float targetYaw = cameraYaw;

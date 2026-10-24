@@ -34,7 +34,7 @@ public class PlayerQuickTurn : MonoBehaviour
 
         Vector2 input = moveAction.ReadValue<Vector2>();
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
         bool sprintPressed = sprintAction.WasPressedThisFrame();
 
         if (input.y < -backInputThreshold && sprintPressed && !isAiming && !isTurning)

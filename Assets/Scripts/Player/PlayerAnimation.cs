@@ -35,7 +35,7 @@ public class PlayerAnimation : MonoBehaviour
 
         Vector3 localVelocity = transform.InverseTransformDirection(velocity);
 
-        bool isAiming = playerAiming != null && playerAiming.isAiming;
+        bool isAiming = playerAiming != null && playerAiming.IsAiming;
 
         playerAnimator.SetFloat(MoveXHash, localVelocity.x, animationDamping, Time.deltaTime);
         playerAnimator.SetFloat(MoveYHash, localVelocity.z, animationDamping, Time.deltaTime);
