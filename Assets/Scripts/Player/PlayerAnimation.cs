@@ -1,15 +1,19 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] private Animator playerAnimator;
-    [SerializeField] private float suavizacao = 0.1f; 
+    [FormerlySerializedAs("suavizacao")]
+    [SerializeField] private float animationDamping = 0.1f;
+
+    private static readonly int MoveXHash = Animator.StringToHash("MoveX");
+    private static readonly int MoveYHash = Animator.StringToHash("MoveY");
+    private static readonly int IsAimingHash = Animator.StringToHash("IsAiming");
+
     private CharacterController characterController;
     private PlayerAiming playerAiming;
-    private static readonly int MoveX = Animator.StringToHash("MoveX");
-    private static readonly int MoveY = Animator.StringToHash("MoveY");
-    private static readonly int IsAiming = Animator.StringToHash("IsAiming");
 
     private void Awake()
     {
@@ -24,17 +28,18 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Update()
     {
-        Vector3 velocidade = characterController.velocity;
-        velocidade.y = 0f;
+        if (playerAnimator == null) return;
 
-        Vector3 local = transform.InverseTransformDirection(velocidade);
+        Vector3 velocity = characterController.velocity;
+        velocity.y = 0f;
+
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
 
         bool isAiming = playerAiming != null && playerAiming.isAiming;
 
-        playerAnimator.SetFloat(MoveX, local.x, suavizacao, Time.deltaTime);
-        playerAnimator.SetFloat(MoveY, local.z, suavizacao, Time.deltaTime);
+        playerAnimator.SetFloat(MoveXHash, localVelocity.x, animationDamping, Time.deltaTime);
+        playerAnimator.SetFloat(MoveYHash, localVelocity.z, animationDamping, Time.deltaTime);
 
-        playerAnimator.SetBool(IsAiming, isAiming);
-       
+        playerAnimator.SetBool(IsAimingHash, isAiming);
     }
 }
