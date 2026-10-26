@@ -35,6 +35,7 @@ public class PlayerAiming : MonoBehaviour
 
     private CinemachineThirdPersonFollow thirdPersonFollow;
     private InputAction aimAction;
+    private PlayerShooting playerShooting;
     private float aimTimer;
 
     public bool IsAiming { get; private set; }
@@ -48,6 +49,16 @@ public class PlayerAiming : MonoBehaviour
 
         if (playerCamera != null)
             thirdPersonFollow = playerCamera.GetComponent<CinemachineThirdPersonFollow>();
+
+
+        playerShooting = GetComponent<PlayerShooting>();
+    }
+
+    private void OnEnable()
+    {
+        if (playerShooting == null) return;
+
+        playerShooting.Fired += HandleFired;
     }
 
     private void Update()
@@ -56,9 +67,11 @@ public class PlayerAiming : MonoBehaviour
         UpdateCamera();
     }
 
-    public void ApplyRecoil()
+    private void OnDisable()
     {
-        aimTimer = Mathf.Max(0f, aimTimer - recoilCrosshairKick);
+        if (playerShooting == null) return;
+
+        playerShooting.Fired -= HandleFired;
     }
 
     private void UpdateAimState()
@@ -101,6 +114,11 @@ public class PlayerAiming : MonoBehaviour
             Vector3 targetOffset = IsAiming ? aimShoulderOffset : normalShoulderOffset;
             thirdPersonFollow.ShoulderOffset = Vector3.Lerp(thirdPersonFollow.ShoulderOffset, targetOffset, Time.deltaTime * aimTransitionSpeed);
         }
+    }
+
+    private void HandleFired()
+    {
+        aimTimer = Mathf.Max(0f, aimTimer - recoilCrosshairKick);
     }
 
     private void SetCrosshairVisible(bool visible)

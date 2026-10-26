@@ -11,6 +11,8 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private float maxDistance = 100f;
     [Tooltip("Camadas que o tiro pode acertar (deixe o Player de fora)")]
     [SerializeField] private LayerMask hitMask;
+    [Tooltip("Dano causado por cada tiro")]
+    [SerializeField, Min(0)] private int damage = 25;
 
     [Header("Munição")]
     [Tooltip("Capacidade do pente")]
@@ -139,9 +141,6 @@ public class PlayerShooting : MonoBehaviour
             currentAmmo--;
 
             Fired?.Invoke();
-
-            if (playerAiming != null)
-                playerAiming.ApplyRecoil();
         }
         else
         {
@@ -153,24 +152,27 @@ public class PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
-        if (muzzleFlashPrefab != null && muzzlePoint != null)
-        {
-            GameObject flash = Instantiate(muzzleFlashPrefab, muzzlePoint.position, muzzlePoint.rotation, muzzlePoint);
+        SpawnMuzzleFlash();
+        CastShot();
+    }
 
-            Destroy(flash, flashDuration);
-        }
+    private void SpawnMuzzleFlash()
+    {
+        if (muzzleFlashPrefab == null || muzzlePoint == null) return;
 
+        GameObject flash = Instantiate(muzzleFlashPrefab, muzzlePoint.position, muzzlePoint.rotation, muzzlePoint);
+
+        Destroy(flash, flashDuration);
+    }
+
+    private void CastShot()
+    {
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, hitMask))
         {
-            // Acertou algo
-            if (impactPrefab != null)
-            {
-                GameObject impactInstance = Instantiate(impactPrefab, hit.point + hit.normal * ImpactSurfaceOffset, Quaternion.LookRotation(-hit.normal));
-
-                Destroy(impactInstance, impactLifetime);
-            }
+            SpawnImpact(hit);
+            ApplyDamage(hit);
 
             if (debugDraw)
             {
@@ -184,6 +186,26 @@ public class PlayerShooting : MonoBehaviour
             if (debugDraw)
                 Debug.DrawLine(cameraTransform.position, cameraTransform.position + cameraTransform.forward * maxDistance, Color.yellow, DebugLineDuration);
         }
+    }
+
+    private void SpawnImpact(RaycastHit hit)
+    {
+        if (impactPrefab == null) return;
+
+        GameObject impactInstance = Instantiate(impactPrefab, hit.point + hit.normal * ImpactSurfaceOffset, Quaternion.LookRotation(-hit.normal));
+
+        impactInstance.transform.SetParent(hit.collider.transform, true);
+
+        Destroy(impactInstance, impactLifetime);
+    }
+
+    private void ApplyDamage(RaycastHit hit)
+    {
+        IDamageable target = hit.collider.GetComponentInParent<IDamageable>();
+
+        if (target == null) return;
+
+        target.TakeDamage(damage);
     }
 
     private void ApplyCameraRecoil()
