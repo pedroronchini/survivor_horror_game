@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bf456e808e0284dab7dddd24c52a7a, type: 3}
   m_Name: Atmosfera_Pensao
   m_EditorClassIdentifier: Assembly-CSharp::AtmosphereProfile
-  fogColor: {r: 0.11764706, g: 0.1254902, b: 0.14117648, a: 0}
-  fogDensity: 0.3
+  fogColor: {r: 0.11764706, g: 0.1254902, b: 0.14117648, a: 1}
+  fogDensity: 0.015
