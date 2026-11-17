@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
@@ -8611,6 +8611,7 @@ GameObject:
   - component: {fileID: 1720441605}
   - component: {fileID: 1720441607}
   - component: {fileID: 1720441608}
+  - component: {fileID: 1720441609}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8674,6 +8675,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteriorSceneLoader
   interiorSceneNames:
   - Pensao
+--- !u!114 &1720441609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720441604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb27ae61892a3541ade2882046dc2a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtmosphereController
+  outdoorProfile: {fileID: 11400000, guid: 4fbfa888a9ca27e4aa6498c2164aed10, type: 2}
+  transitionDuration: 1
 --- !u!1 &1741533840
 GameObject:
   m_ObjectHideFlags: 0

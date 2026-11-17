@@ -169,7 +169,7 @@ public class PlayerShooting : MonoBehaviour
     {
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, hitMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, hitMask, QueryTriggerInteraction.Ignore))
         {
             SpawnImpact(hit);
             ApplyDamage(hit);

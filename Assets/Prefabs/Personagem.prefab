@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 3484740610010149018}
   m_Layer: 3
   m_Name: Personagem
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -921,6 +921,7 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 55
+  damage: 25
   magazineSize: 15
   reserveAmmo: 30
   reloadDuration: 1.5
