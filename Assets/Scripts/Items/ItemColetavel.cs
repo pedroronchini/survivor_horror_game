@@ -13,10 +13,10 @@ public class ItemColetavel : MonoBehaviour, IInteractable
         if (itemHasAdded)
         {
             Destroy(gameObject);
-        } else
+        }
+        else
         {
             Debug.Log("Inventário Cheio!");
         }
-        
     }
 }

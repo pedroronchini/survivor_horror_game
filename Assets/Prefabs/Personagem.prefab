@@ -829,7 +829,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446695c5aa6c64442b6c8eb755607829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  interactionPrompt: {fileID: 0}
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 64
+  detectionRadius: 0.8
+  detectionForwardOffset: 0.7
+  detectionHeight: 0
 --- !u!114 &8755781670046467344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -920,7 +925,7 @@ MonoBehaviour:
   maxDistance: 100
   hitMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 119
   damage: 25
   magazineSize: 15
   reserveAmmo: 30
